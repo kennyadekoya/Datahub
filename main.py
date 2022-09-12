@@ -706,7 +706,7 @@ def parttimebutton():
         position = ""
     return render_template("parttimeForm.html", personal_email=personal_email.capitalize() , year = year, company_name = company_name, pay = pay, position = position.title())
     parttimebutton()
-
+# part time stuff
 @app.route('/')
 def parttime_form():
     return render_template('parttimeForm.html')
