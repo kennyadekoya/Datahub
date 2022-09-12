@@ -195,9 +195,15 @@ form{
     <input type="text" placeholder="Enter the name of the program you're enrolled in" name="PROGRAM" id="program2" required>
     {%endif%}
 
-  <label for="Degree"><b>Degree</b></label>
-    <input type="text" placeholder="Enter the degree you're pursuing" name="DEGREE" id="Degree" required>
 
+  {% if degree != "" %}
+  <label for="Degree1"><b>Degree</b></label>
+    <input type="text" placeholder="Enter the degree you're pursuing" name="DEGREE"  value={{degree}} id="Degree1" required>
+{%endif%}
+  {% if degree == "" %}
+  <label for="Degree2"><b>Degree</b></label>
+    <input type="text" placeholder="Enter the degree you're pursuing" name="DEGREE" id="Degree2" required>
+{%endif%}
     <button class="registerbtn">Submit Form</button>
 
   </div>
