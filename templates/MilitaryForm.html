@@ -154,21 +154,55 @@ form{
 <!--       <label for="email"><b>Fisk Email</b></label>-->
 <!--    <input name = "EMAIL" type="text" placeholder="Enter your Fisk Email" id="email" required>-->
 
-    <label for="personal_email"><b>Personal Email</b></label>
-    <input name = "PERSONAL_EMAIL" type="text" placeholder="Enter your classification" id="personal_email" required>
+     {% if personal_email != "" %}
+    <label for="personal_email1"><b>Personal Email</b></label>
+    <input name = "PERSONAL_EMAIL" type="text" placeholder="Enter your Personal Email" value={{personal_email}} id="personal_email1" required>
+        {%endif%}
 
-      <label for="Year"><b>Year</b></label>
-    <input name = "YEAR" type="text" placeholder="Enter the year you start military service" id="Year" required>
+      {% if personal_email == "" %}
+       <label for="personal_email2"><b>Personal Email</b></label>
+     <input name = "PERSONAL_EMAIL" type="text" placeholder="Enter your Personal Email" id="personal_email2" required>
+        {%endif%}
+
+     {% if year != "" %}
+      <label for="Year1"><b>Year</b></label>
+    <input name = "YEAR" type="text" placeholder="Enter the year of your internship" value={{year}} id="Year1" required>
+    {%endif%}
+      {% if year == "" %}
+      <label for="Year2"><b>Year</b></label>
+    <input name = "YEAR" type="text" placeholder="Enter the year of your internship" id="Year2" required>
+    {%endif%}
+
+    {% if branch != "" %}
+  <label for="branch1"><b>Branch Name</b></label>
+    <input type="text" placeholder="Enter the name of your branch" name="BRANCH" value={{branch}} id="branch1" required>
+ {%endif%}
+
+{% if branch == "" %}
+  <label for="branch2"><b>Branch Name</b></label>
+    <input type="text" placeholder="Enter the name of your branch" name="BRANCH"  id="branch2" required>
+ {%endif%}
 
 
-  <label for="branch"><b>Branch Name</b></label>
-    <input type="text" placeholder="Enter the name of your branch" name="BRANCH" id="branch" required>
+   {% if position != "" %}
+  <label for="position1"><b>Position</b></label>
+    <input type="text" placeholder="Enter the name of your position" name="POSITION" value={{position}} id="position1" required>
+  {%endif%}
 
-  <label for="position"><b>Position</b></label>
-    <input type="text" placeholder="Enter the name of your position" name="POSITION" id="position" required>
+  {% if position == "" %}
+  <label for="position2"><b>Position</b></label>
+    <input type="text" placeholder="Enter the name of your position" name="POSITION"  id="position2" required>
+  {%endif%}
 
-  <label for="pay"><b>Hourly Pay</b></label>
-    <input type="text" placeholder="Enter your hourly pay" name="PAY" id="pay" required>
+  {% if pay != "" %}
+  <label for="pay1"><b>Salary</b></label>
+    <input type="text" placeholder="Enter your Hourly Pay" name="PAY" value={{pay}} id="pay1" required>
+  {%endif%}
+
+  {% if pay == "" %}
+  <label for="pay2"><b>Salary</b></label>
+    <input type="text" placeholder="Enter your Hourly Pay" name="PAY" id="pay2" required>
+  {%endif%}
 
     <button class="registerbtn">Submit Form</button>
 
