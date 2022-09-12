@@ -205,7 +205,7 @@ def facultysignin():
 
     db = firestore.client()
     userid = ''
-    if 'My.Fisk.Edu' in email:
+    if 'Fisk.Edu' in email:
         for i in email:
             if i != '@':
                 userid = userid + i
@@ -214,11 +214,10 @@ def facultysignin():
 
     result = db.collection('FacultyandStaff').document(str(userid)).get()
     result = result.to_dict()
-    # print(result)
-    first_name = result.get("First Name")
+    first_name = result.get('First Name')
     first_name = first_name.lower()
     first_name = first_name.title()
-    last_name = result.get("Last Name")
+    last_name = result.get('Last Name')
     last_name = last_name.lower()
     last_name = last_name.title()
 
@@ -237,6 +236,7 @@ def my_form4():
 def facultysignup():
     # cred = credentials.Certificate('firebase-sdk.json')
     # firebase_admin.initialize_app(cred)
+
     first_name = request.form['FIRSTNAME']
     first_name = first_name.lower()
     first_name = first_name.title()
@@ -248,18 +248,19 @@ def facultysignup():
     email = email.title()
     password = request.form['PASSWORD']
 
+    userid = ''
     if 'Fisk.Edu' in email:
         for i in email:
             if i != '@':
                 userid = userid + i
             elif i == '@':
                 break
-    print(id)
-    user = auth.create_user(uid=id, email=email, password=password)
+    # print(id)
+    user = auth.create_user(uid=userid, email=email, password=password)
 
     db = firestore.client()
 
-    doc_ref = db.collection('FacultyandStaff').document(str(id))
+    doc_ref = db.collection('FacultyandStaff').document(str(userid))
 
     doc_ref.set({
         'UserID': str(id),
@@ -676,7 +677,35 @@ def fulltime_survey():
 #parttime
 @app.route('/parttime_survey')
 def parttimebutton():
-    return render_template("parttimeForm.html")
+    userid = ''
+    db = firestore.client()
+    if 'My.Fisk.Edu' in studentsignin.email:
+        for i in studentsignin.email:
+            if i != '@':
+                userid = userid + i
+            elif i == '@':
+                break
+
+    doc_ref = db.collection('student').document(str(userid))
+    docs = doc_ref.collection(str('2022')).get()
+    docs = doc_ref.collection(str('2022')).document('Part-Time Information').get()
+
+    info_doc = docs.to_dict()
+    if info_doc:
+        personal_email = info_doc['Personal Email']
+        year = info_doc['Year']
+        company_name = info_doc['Company Name']
+        position = info_doc['Position']
+        pay = info_doc['Hourly Pay']
+
+    else:
+        personal_email = ""
+        year = ""
+        company_name = ""
+        pay = ""
+        position = ""
+    return render_template("parttimeForm.html", personal_email=personal_email.capitalize() , year = year, company_name = company_name, pay = pay, position = position.title())
+    parttimebutton()
 
 @app.route('/')
 def parttime_form():
@@ -732,7 +761,7 @@ def gradschoolbutton():
 
     doc_ref = db.collection('student').document(str(userid))
     docs = doc_ref.collection(str('2022')).get()
-    docs = doc_ref.collection(str('2022')).document('Full-Time Information').get()
+    docs = doc_ref.collection(str('2022')).document('Graduate School Information').get()
 
     info_doc = docs.to_dict()
     if info_doc:
@@ -778,9 +807,9 @@ def gradschool_survey():
 
     db = firestore.client()
     doc_ref = db.collection('student').document(str(id))
-    parttime_info = doc_ref.collection(str(year)).document('Graduate School Information')
+    grad_info = doc_ref.collection(str(year)).document('Graduate School Information')
 
-    parttime_info.set({
+    grad_info.set({
         'Personal Email': str(personal_email),
         'Year': str(year),
         'Graduate School': str(uni_name),
@@ -793,7 +822,35 @@ def gradschool_survey():
 #military school
 @app.route('/military_survey')
 def militarybutton():
-    return render_template("militaryForm.html")
+    userid = ''
+    db = firestore.client()
+    if 'My.Fisk.Edu' in studentsignin.email:
+        for i in studentsignin.email:
+            if i != '@':
+                userid = userid + i
+            elif i == '@':
+                break
+
+    doc_ref = db.collection('student').document(str(userid))
+    docs = doc_ref.collection(str('2022')).get()
+    docs = doc_ref.collection(str('2022')).document('Military Service Information').get()
+
+    info_doc = docs.to_dict()
+    if info_doc:
+        personal_email = info_doc['Personal Email']
+        year = info_doc['Year']
+        branch = info_doc['Branch']
+        position= info_doc['Position']
+        pay = info_doc['Pay']
+
+    else:
+        personal_email = ""
+        year = ""
+        branch = ""
+        position  = ""
+        pay = ""
+    return render_template("militaryForm.html", personal_email=personal_email,year=year, branch=branch, position=position, pay=pay)
+    militarybutton()
 
 @app.route('/')
 def military_form():
