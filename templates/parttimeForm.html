@@ -154,21 +154,54 @@ form{
 <!--       <label for="email"><b>Fisk Email</b></label>-->
 <!--    <input name = "EMAIL" type="text" placeholder="Enter your Fisk Email" id="email" required>-->
 
-    <label for="personal_email"><b>Personal Email</b></label>
-    <input name = "PERSONAL_EMAIL" type="text" placeholder="Enter your Personal Email" id="personal_email" required>
+     {% if personal_email != "" %}
+    <label for="personal_email1"><b>Personal Email</b></label>
+    <input name = "PERSONAL_EMAIL" type="text" placeholder="Enter your Personal Email" value={{personal_email}} id="personal_email1" required>
+        {%endif%}
 
-      <label for="Year"><b>Year</b></label>
-    <input name = "YEAR" type="text" placeholder="Enter the year your part-time opportunity starts" id="Year" required>
+      {% if personal_email == "" %}
+       <label for="personal_email2"><b>Personal Email</b></label>
+     <input name = "PERSONAL_EMAIL" type="text" placeholder="Enter your Personal Email" id="personal_email2" required>
+        {%endif%}
 
+      {% if year != "" %}
+      <label for="Year1"><b>Year</b></label>
+    <input name = "YEAR" type="text" placeholder="Enter the year of your internship" value={{year}} id="Year1" required>
+    {%endif%}
+      {% if year == "" %}
+      <label for="Year2"><b>Year</b></label>
+    <input name = "YEAR" type="text" placeholder="Enter the year of your internship" id="Year2" required>
+    {%endif%}
 
-  <label for="companyname"><b>Company Name</b></label>
-    <input type="text" placeholder="Enter the company's name" name="COMPANYNAME" id="companyname" required>
+      {% if company_name != "" %}
+  <label for="companyname1"><b>Company Name</b></label>
+    <input type="text" placeholder="Enter the company's name" name="COMPANYNAME" value={{company_name}} id="companyname1" required>
+      {%endif%}
 
-  <label for="position"><b>Position</b></label>
-    <input type="text" placeholder="Enter the name of your position" name="POSITION" id="position" required>
+        {% if company_name == "" %}
+  <label for="companyname2"><b>Company Name</b></label>
+    <input type="text" placeholder="Enter the company's name" name="COMPANYNAME"  id="companyname2" required>
+      {%endif%}
 
-  <label for="pay"><b>Hourly Pay</b></label>
-    <input type="text" placeholder="Enter your hourly pay" name="PAY" id="pay" required>
+   {% if position != "" %}
+  <label for="position1"><b>Position</b></label>
+    <input type="text" placeholder="Enter the name of your position" name="POSITION" value={{position}} id="position1" required>
+  {%endif%}
+
+  {% if position == "" %}
+  <label for="position2"><b>Position</b></label>
+    <input type="text" placeholder="Enter the name of your position" name="POSITION"  id="position2" required>
+  {%endif%}
+
+  {% if pay != "" %}
+  <label for="pay1"><b>Hourly Pay</b></label>
+    <input type="text" placeholder="Enter your Hourly Pay" name="PAY" value={{pay}} id="pay1" required>
+  {%endif%}
+
+  {% if pay == "" %}
+  <label for="pay2"><b>Hourly Pay</b></label>
+    <input type="text" placeholder="Enter your Hourly Pay" name="PAY" id="pay2" required>
+  {%endif%}
 
     <button class="registerbtn">Submit Form</button>
 
