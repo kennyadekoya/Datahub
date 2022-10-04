@@ -190,13 +190,14 @@ def stafflogin():
 @app.route('/')
 def my_form3():
     return render_template('faculty.html')
+
 @app.route('/newfaculty', methods=['POST','GET'])#name of form
 def facultysignin():
     firebase = pyrebase.initialize_app(firebaseConfig)
     auth = firebase.auth()
     email = request.form['EMAIL']
     email = email.lower()
-    email = email.title()
+    facultysignin.email = email.title()
     password = request.form['PASSWORD']
     login = auth.sign_in_with_email_and_password(email, password)
 
@@ -205,24 +206,31 @@ def facultysignin():
 
     db = firestore.client()
     userid = ''
-    if 'My.Fisk.Edu' in email:
-        for i in email:
+    if 'Fisk.Edu' in facultysignin.email:
+        for i in facultysignin.email:
             if i != '@':
                 userid = userid + i
             elif i == '@':
                 break
+    # print(userid)
 
     result = db.collection('FacultyandStaff').document(str(userid)).get()
     result = result.to_dict()
-    # print(result)
     first_name = result.get("First Name")
     first_name = first_name.lower()
-    first_name = first_name.title()
+    facultysignin.first_name = first_name.title()
     last_name = result.get("Last Name")
     last_name = last_name.lower()
     last_name = last_name.title()
+    facultysignin.last_name = last_name.title()
+    email = result.get("Email")
+    email = email.lower()
+    facultysignin.email = email.title()
+    
+    return render_template('facultypage.html',firstname=facultysignin.first_name , lastname=facultysignin.last_name, fiskemail=facultysignin.email), dict(userid=userid)
 
-    return render_template('facultypage.html', firstname=first_name, lastname=last_name,  fiskemail=email)
+    facultysignin()
+
 
 # faculty sign up
 @app.route('/Facultysignupsheet')
@@ -248,26 +256,29 @@ def facultysignup():
     email = email.title()
     password = request.form['PASSWORD']
 
+    userid = ''
     if 'Fisk.Edu' in email:
         for i in email:
             if i != '@':
                 userid = userid + i
             elif i == '@':
                 break
-    print(id)
-    user = auth.create_user(uid=id, email=email, password=password)
+
+    # print(id)
+    user = auth.create_user(uid=userid, email=email, password=password)
 
     db = firestore.client()
 
-    doc_ref = db.collection('FacultyandStaff').document(str(id))
+    doc_ref = db.collection('FacultyandStaff').document(str(userid))
 
     doc_ref.set({
-        'UserID': str(id),
+        'UserID': str(userid),
         'First Name': str(first_name),
         'Last Name': str(last_name),
         'Email': str(email)
     })
-    return render_template('facultypage.html', firstname=first_name, lastname=last_name, fiskemail=email)
+    return render_template('faculty.html', firstname=first_name, lastname=last_name, fiskemail=email)
+    facultysignup()
 
 # password reset
 @app.route('/faculy-passwordreset')
@@ -320,8 +331,44 @@ def fallbutton():
         pay = ""
         position = ""
 
-    return render_template("FallForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+    return render_template("fallinternshipfollowup.html", grade=grade.title(), year=year, company_name=company_name, pay=pay,position=position.title())
     fallbutton()
+
+@app.route('/fall_internship_info')
+def fallbuttonpt2():
+        # cred = credentials.Certificate('firebase-sdk.json')
+        # firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        userid = ''
+        if 'My.Fisk.Edu' in studentsignin.email:
+            for i in studentsignin.email:
+                if i != '@':
+                    userid = userid + i
+                elif i == '@':
+                    break
+        doc_ref = db.collection('student').document(str(userid))
+        docs = doc_ref.collection(str('2022')).get()
+        docs = doc_ref.collection(str('2022')).document('Fall Internship Information').get()
+        print(docs.to_dict())
+        info_doc = docs.to_dict()
+        if info_doc:
+            grade = info_doc['Classification']
+            year = info_doc['Internship Year']
+            company_name = info_doc['Company Name']
+            pay = info_doc['Hourly Pay']
+            position = info_doc['Position']
+        else:
+            grade = ""
+            year = ""
+            company_name = ""
+            pay = ""
+            position = ""
+
+        # return render_template("Fa.html", grade=grade.title(), year=year, company_name=company_name,
+        #                        pay=pay, position=position.title())
+        return render_template("FallForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+        fallbuttonpt2()
+
 
 @app.route('/')
 def fall_form():
@@ -368,11 +415,87 @@ def fall_survey():
     return render_template('CompletedForm.html')
     fall_survey()
 
-# spring semester
+
+#
+# # spring semester
+# @app.route('/spring_survey')
+# def springbutton():
+#     userid = ''
+#     db = firestore.client()
+#     if 'My.Fisk.Edu' in studentsignin.email:
+#         for i in studentsignin.email:
+#             if i != '@':
+#                 userid = userid + i
+#             elif i == '@':
+#                 break
+#     doc_ref = db.collection('student').document(str(userid))
+#     docs = doc_ref.collection(str('2022')).get()
+#     docs = doc_ref.collection(str('2022')).document('Spring Internship Information').get()
+#     print(docs.to_dict())
+#     info_doc = docs.to_dict()
+#     if info_doc:
+#         grade = info_doc['Classification']
+#         year = info_doc['Internship Year']
+#         company_name = info_doc['Company Name']
+#         pay = info_doc['Hourly Pay']
+#         position = info_doc['Position']
+#     else:
+#         grade = ""
+#         year = ""
+#         company_name = ""
+#         pay = ""
+#         position = ""
+#     return render_template("SpringForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+#     springbutton()
+#
+# @app.route('/')
+# def spring_form():
+#     return render_template('SpringForm.html')
+#
+# @app.route('/springsurvey', methods=['POST','GET'])#name of form
+# def spring_survey():
+#     # cred = credentials.Certificate('firebase-sdk.json')
+#     # firebase_admin.initialize_app(cred)
+#
+#     email = studentsignin.email
+#     # email = request.form['EMAIL']
+#     email = email.lower()
+#     email = email.title()
+#     id = ''
+#     if 'My.Fisk.Edu' in email:
+#         for i in email:
+#             if i != '@':
+#                 id = id + i
+#             elif i == '@':
+#                 break
+#
+#     classification = request.form['CLASSIFICATION']
+#     year = request.form['YEAR']
+#     company_name = request.form['COMPANYNAME']
+#     position = request.form['POSITION']
+#     pay = request.form['PAY']
+#
+#     db = firestore.client()
+#     doc_ref = db.collection('student').document(str(id))
+#     spring_info = doc_ref.collection(str(year)).document('Spring Internship Information')
+#
+#     spring_info.set({
+#         'Classification': str(classification),
+#         'Internship Year': str(year),
+#         'Company Name': str(company_name),
+#         'Position': str(position),
+#         'Hourly Pay': str(pay)
+#     })
+#     return render_template('Completedform.html')
+#     spring_survey()
+
+#fall semester
 @app.route('/spring_survey')
 def springbutton():
-    userid = ''
+    # cred = credentials.Certificate('firebase-sdk.json')
+    # firebase_admin.initialize_app(cred)
     db = firestore.client()
+    userid = ''
     if 'My.Fisk.Edu' in studentsignin.email:
         for i in studentsignin.email:
             if i != '@':
@@ -396,12 +519,50 @@ def springbutton():
         company_name = ""
         pay = ""
         position = ""
-    return render_template("SpringForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+
+    return render_template("springinternshipfollowup.html", grade=grade.title(), year=year, company_name=company_name, pay=pay,position=position.title())
     springbutton()
+
+@app.route('/spring_internship_info')
+def springbuttonpt2():
+        # cred = credentials.Certificate('firebase-sdk.json')
+        # firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        userid = ''
+        if 'My.Fisk.Edu' in studentsignin.email:
+            for i in studentsignin.email:
+                if i != '@':
+                    userid = userid + i
+                elif i == '@':
+                    break
+        doc_ref = db.collection('student').document(str(userid))
+        docs = doc_ref.collection(str('2022')).get()
+        docs = doc_ref.collection(str('2022')).document('Spring Internship Information').get()
+        print(docs.to_dict())
+        info_doc = docs.to_dict()
+        if info_doc:
+            grade = info_doc['Classification']
+            year = info_doc['Internship Year']
+            company_name = info_doc['Company Name']
+            pay = info_doc['Hourly Pay']
+            position = info_doc['Position']
+        else:
+            grade = ""
+            year = ""
+            company_name = ""
+            pay = ""
+            position = ""
+
+        # return render_template("Fa.html", grade=grade.title(), year=year, company_name=company_name,
+        #                        pay=pay, position=position.title())
+        return render_template("SpringForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+        springbuttonpt2()
+
 
 @app.route('/')
 def spring_form():
     return render_template('SpringForm.html')
+
 
 @app.route('/springsurvey', methods=['POST','GET'])#name of form
 def spring_survey():
@@ -437,14 +598,91 @@ def spring_survey():
         'Position': str(position),
         'Hourly Pay': str(pay)
     })
-    return render_template('Completedform.html')
+
+    #retrieving data
+
+    return render_template('CompletedForm.html')
     spring_survey()
+#
+# #summer semester
+# @app.route('/summer_survey')
+# def summerbutton():
+#     userid = ''
+#     db = firestore.client()
+#     if 'My.Fisk.Edu' in studentsignin.email:
+#         for i in studentsignin.email:
+#             if i != '@':
+#                 userid = userid + i
+#             elif i == '@':
+#                 break
+#     doc_ref = db.collection('student').document(str(userid))
+#     docs = doc_ref.collection(str('2022')).get()
+#     docs = doc_ref.collection(str('2022')).document('Summer Internship Information').get()
+#     print(docs.to_dict())
+#     info_doc = docs.to_dict()
+#     if info_doc:
+#         grade = info_doc['Classification']
+#         year = info_doc['Internship Year']
+#         company_name = info_doc['Company Name']
+#         pay = info_doc['Hourly Pay']
+#         position = info_doc['Position']
+#     else:
+#         grade = ""
+#         year = ""
+#         company_name = ""
+#         pay = ""
+#         position = ""
+#     return render_template("SummerForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+#     summerbutton()
+#
+# @app.route('/')
+# def summer_form():
+#     return render_template('SummerForm.html')
+#
+# @app.route('/summersurvey', methods=['POST','GET'])#name of form
+# def summer_survey():
+#     # cred = credentials.Certificate('firebase-sdk.json')
+#     # firebase_admin.initialize_app(cred)
+#     email = studentsignin.email
+#     # email = request.form['EMAIL']
+#     email = email.lower()
+#     email = email.title()
+#     id = ''
+#     if 'My.Fisk.Edu' in email:
+#         for i in email:
+#             if i != '@':
+#                 id = id + i
+#             elif i == '@':
+#                 break
+#
+#     classification = request.form['CLASSIFICATION']
+#     year = request.form['YEAR']
+#     company_name = request.form['COMPANYNAME']
+#     position = request.form['POSITION']
+#     pay = request.form['PAY']
+#
+#     db = firestore.client()
+#     doc_ref = db.collection('student').document(str(id))
+#     summer_info = doc_ref.collection(str(year)).document('Summer Internship Information')
+#
+#     summer_info.set({
+#         'Classification': str(classification),
+#         'Internship Year': str(year),
+#         'Company Name': str(company_name),
+#         'Position': str(position),
+#         'Hourly Pay': str(pay)
+#     })
+#     return render_template('Completedform.html')
+#     summer_survey()
+
 
 #summer semester
 @app.route('/summer_survey')
 def summerbutton():
-    userid = ''
+    # cred = credentials.Certificate('firebase-sdk.json')
+    # firebase_admin.initialize_app(cred)
     db = firestore.client()
+    userid = ''
     if 'My.Fisk.Edu' in studentsignin.email:
         for i in studentsignin.email:
             if i != '@':
@@ -468,16 +706,56 @@ def summerbutton():
         company_name = ""
         pay = ""
         position = ""
-    return render_template("SummerForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+
+    return render_template("summerinternshipfollowup.html", grade=grade.title(), year=year, company_name=company_name, pay=pay,position=position.title())
     summerbutton()
+
+@app.route('/summer_internship_info')
+def summerbuttonpt2():
+        # cred = credentials.Certificate('firebase-sdk.json')
+        # firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        userid = ''
+        if 'My.Fisk.Edu' in studentsignin.email:
+            for i in studentsignin.email:
+                if i != '@':
+                    userid = userid + i
+                elif i == '@':
+                    break
+        doc_ref = db.collection('student').document(str(userid))
+        docs = doc_ref.collection(str('2022')).get()
+        docs = doc_ref.collection(str('2022')).document('Summer Internship Information').get()
+        print(docs.to_dict())
+        info_doc = docs.to_dict()
+        if info_doc:
+            grade = info_doc['Classification']
+            year = info_doc['Internship Year']
+            company_name = info_doc['Company Name']
+            pay = info_doc['Hourly Pay']
+            position = info_doc['Position']
+        else:
+            grade = ""
+            year = ""
+            company_name = ""
+            pay = ""
+            position = ""
+
+        # return render_template("Fa.html", grade=grade.title(), year=year, company_name=company_name,
+        #                        pay=pay, position=position.title())
+        return render_template("SummerForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+        summerbuttonpt2()
+
+
 @app.route('/')
 def summer_form():
     return render_template('SummerForm.html')
+
 
 @app.route('/summersurvey', methods=['POST','GET'])#name of form
 def summer_survey():
     # cred = credentials.Certificate('firebase-sdk.json')
     # firebase_admin.initialize_app(cred)
+
     email = studentsignin.email
     # email = request.form['EMAIL']
     email = email.lower()
@@ -507,14 +785,92 @@ def summer_survey():
         'Position': str(position),
         'Hourly Pay': str(pay)
     })
-    return render_template('Completedform.html')
+
+    #retrieving data
+
+    return render_template('CompletedForm.html')
     summer_survey()
+
+
+#winter semester
+# @app.route('/winter_survey')
+# def winterbutton():
+#     userid = ''
+#     db = firestore.client()
+#     if 'My.Fisk.Edu' in studentsignin.email:
+#         for i in studentsignin.email:
+#             if i != '@':
+#                 userid = userid + i
+#             elif i == '@':
+#                 break
+#     doc_ref = db.collection('student').document(str(userid))
+#     docs = doc_ref.collection(str('2022')).get()
+#     docs = doc_ref.collection(str('2022')).document('Winter Internship Information').get()
+#     print(docs.to_dict())
+#     info_doc = docs.to_dict()
+#     if info_doc:
+#         grade = info_doc['Classification']
+#         year = info_doc['Internship Year']
+#         company_name = info_doc['Company Name']
+#         pay = info_doc['Hourly Pay']
+#         position = info_doc['Position']
+#     else:
+#         grade = ""
+#         year = ""
+#         company_name = ""
+#         pay = ""
+#         position = ""
+#     return render_template("WinterForm.html",grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+#     winterbutton()
+#
+# @app.route('/')
+# def winter_form():
+#     return render_template('WinterForm.html')
+#
+# @app.route('/wintersurvey', methods=['POST','GET'])#name of form
+# def winter_survey():
+#     # cred = credentials.Certificate('firebase-sdk.json')
+#     # firebase_admin.initialize_app(cred)
+#     email = studentsignin.email
+#     # email = request.form['EMAIL']
+#     email = email.lower()
+#     email = email.title()
+#     id = ''
+#     if 'My.Fisk.Edu' in email:
+#         for i in email:
+#             if i != '@':
+#                 id = id + i
+#             elif i == '@':
+#                 break
+#
+#     classification = request.form['CLASSIFICATION']
+#     year = request.form['YEAR']
+#     company_name = request.form['COMPANYNAME']
+#     position = request.form['POSITION']
+#     pay = request.form['PAY']
+#
+#     db = firestore.client()
+#     doc_ref = db.collection('student').document(str(id))
+#     winter_info = doc_ref.collection(str(year)).document('Winter Internship Information')
+#
+#     winter_info.set({
+#         'Classification': str(classification),
+#         'Internship Year': str(year),
+#         'Company Name': str(company_name),
+#         'Position': str(position),
+#         'Hourly Pay': str(pay)
+#     })
+#     return render_template('Completedform.html')
+#     winter_survey()
+
 
 #winter semester
 @app.route('/winter_survey')
 def winterbutton():
-    userid = ''
+    # cred = credentials.Certificate('firebase-sdk.json')
+    # firebase_admin.initialize_app(cred)
     db = firestore.client()
+    userid = ''
     if 'My.Fisk.Edu' in studentsignin.email:
         for i in studentsignin.email:
             if i != '@':
@@ -538,17 +894,56 @@ def winterbutton():
         company_name = ""
         pay = ""
         position = ""
-    return render_template("WinterForm.html",grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+
+    return render_template("winterinternshipfollowup.html", grade=grade.title(), year=year, company_name=company_name, pay=pay,position=position.title())
     winterbutton()
+
+@app.route('/winter_internship_info')
+def winterbuttonpt2():
+        # cred = credentials.Certificate('firebase-sdk.json')
+        # firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        userid = ''
+        if 'My.Fisk.Edu' in studentsignin.email:
+            for i in studentsignin.email:
+                if i != '@':
+                    userid = userid + i
+                elif i == '@':
+                    break
+        doc_ref = db.collection('student').document(str(userid))
+        docs = doc_ref.collection(str('2022')).get()
+        docs = doc_ref.collection(str('2022')).document('Winter Internship Information').get()
+        print(docs.to_dict())
+        info_doc = docs.to_dict()
+        if info_doc:
+            grade = info_doc['Classification']
+            year = info_doc['Internship Year']
+            company_name = info_doc['Company Name']
+            pay = info_doc['Hourly Pay']
+            position = info_doc['Position']
+        else:
+            grade = ""
+            year = ""
+            company_name = ""
+            pay = ""
+            position = ""
+
+        # return render_template("Fa.html", grade=grade.title(), year=year, company_name=company_name,
+        #                        pay=pay, position=position.title())
+        return render_template("WinterForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+        winterbuttonpt2()
+
 
 @app.route('/')
 def winter_form():
     return render_template('WinterForm.html')
 
+
 @app.route('/wintersurvey', methods=['POST','GET'])#name of form
 def winter_survey():
     # cred = credentials.Certificate('firebase-sdk.json')
     # firebase_admin.initialize_app(cred)
+
     email = studentsignin.email
     # email = request.form['EMAIL']
     email = email.lower()
@@ -578,13 +973,353 @@ def winter_survey():
         'Position': str(position),
         'Hourly Pay': str(pay)
     })
-    return render_template('Completedform.html')
+
+    #retrieving data
+
+    return render_template('CompletedForm.html')
     winter_survey()
 
 
 
-# #Post grad stuff!!!!!
+@app.route('/fallresearch_survey')
+def fallresearchbutton():
+        # cred = credentials.Certificate('firebase-sdk.json')
+        # firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        userid = ''
+        if 'My.Fisk.Edu' in studentsignin.email:
+            for i in studentsignin.email:
+                if i != '@':
+                    userid = userid + i
+                elif i == '@':
+                    break
+        doc_ref = db.collection('student').document(str(userid))
+        docs = doc_ref.collection(str('2022')).get()
+        docs = doc_ref.collection(str('2022')).document('Fall Research Experience Information').get()
+        print(docs.to_dict())
+        info_doc = docs.to_dict()
 
+        if info_doc:
+            classification = info_doc['Classification']
+            year = info_doc['Year']
+            uni_name = info_doc['University Name']
+            program = info_doc['Program Name']
+            topic = info_doc['Topic']
+            conference = info_doc['Conference']
+            pay = info_doc['Pay']
+        else:
+            classification = ""
+            year = ""
+            uni_name = ""
+            program = ""
+            topic = ""
+            conference = ""
+            pay = ""
+
+        # return render_template("Fa.html", grade=grade.title(), year=year, company_name=company_name,
+        #                        pay=pay, position=position.title())
+        return render_template("fallresearchForm.html", topic = topic, uni_name= uni_name, program=program, conference=conference.title(), pay = pay, year=year, classification=classification)
+        fallresearchbutton()
+    # return render_template("FallForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+    # fallbutton()
+
+@app.route('/fallresearchsurvey', methods=['POST','GET'])#name of form
+def fallresearch_survey():
+    # cred = credentials.Certificate('firebase-sdk.json')
+    # firebase_admin.initialize_app(cred)
+    email = studentsignin.email
+    # email = request.form['EMAIL']
+    email = email.lower()
+    email = email.title()
+    id = ''
+    if 'My.Fisk.Edu' in email:
+        for i in email:
+            if i != '@':
+                id = id + i
+            elif i == '@':
+                break
+
+    db = firestore.client()
+    doc_ref = db.collection('student').document(str(id))
+    research_info = doc_ref.collection('2022').document('Fall Research Experience Information')
+
+    classification = request.form['CLASSIFICATION']
+    uni_name = request.form['UNINAME']
+    year = request.form['YEAR']
+    conference = request.form['CONFERENCE']
+    program = request.form['PROGRAM']
+    pay = request.form['PAY']
+    topic = request.form['TOPIC']
+
+    research_info.set({
+        'Fisk Email': str(email),
+        'Classification': str(classification),
+        'Year': str(year),
+        'University Name': str(uni_name),
+        'Program Name': str(program),
+        'Topic': str(topic),
+        'Conference': str(conference),
+        'Pay': str(pay)
+    })
+    return render_template('Completedform.html')
+    fallresearch_survey()
+
+
+
+@app.route('/springresearch_survey')
+def springresearchbutton():
+        # cred = credentials.Certificate('firebase-sdk.json')
+        # firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        userid = ''
+        if 'My.Fisk.Edu' in studentsignin.email:
+            for i in studentsignin.email:
+                if i != '@':
+                    userid = userid + i
+                elif i == '@':
+                    break
+        doc_ref = db.collection('student').document(str(userid))
+        docs = doc_ref.collection(str('2022')).get()
+        docs = doc_ref.collection(str('2022')).document('Spring Research Experience Information').get()
+        print(docs.to_dict())
+        info_doc = docs.to_dict()
+
+        if info_doc:
+            classification = info_doc['Classification']
+            year = info_doc['Year']
+            uni_name = info_doc['University Name']
+            program = info_doc['Program Name']
+            topic = info_doc['Topic']
+            conference = info_doc['Conference']
+            pay = info_doc['Pay']
+        else:
+            classification = ""
+            year = ""
+            uni_name = ""
+            program = ""
+            topic = ""
+            conference = ""
+            pay = ""
+
+        # return render_template("Fa.html", grade=grade.title(), year=year, company_name=company_name,
+        #                        pay=pay, position=position.title())
+        return render_template("springresearchForm.html", topic = topic, uni_name= uni_name, program=program, conference=conference.title(), pay = pay, year=year, classification=classification)
+        springresearchbutton()
+    # return render_template("FallForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+    # fallbutton()
+
+@app.route('/springresearchsurvey', methods=['POST','GET'])#name of form
+def springresearch_survey():
+    # cred = credentials.Certificate('firebase-sdk.json')
+    # firebase_admin.initialize_app(cred)
+    email = studentsignin.email
+    # email = request.form['EMAIL']
+    email = email.lower()
+    email = email.title()
+    id = ''
+    if 'My.Fisk.Edu' in email:
+        for i in email:
+            if i != '@':
+                id = id + i
+            elif i == '@':
+                break
+
+    db = firestore.client()
+    doc_ref = db.collection('student').document(str(id))
+    research_info = doc_ref.collection('2022').document('Spring Research Experience Information')
+
+    classification = request.form['CLASSIFICATION']
+    uni_name = request.form['UNINAME']
+    year = request.form['YEAR']
+    conference = request.form['CONFERENCE']
+    program = request.form['PROGRAM']
+    pay = request.form['PAY']
+    topic = request.form['TOPIC']
+
+    research_info.set({
+        'Fisk Email': str(email),
+        'Year': str(year),
+        'Classification': str(classification),
+        'University Name': str(uni_name),
+        'Program Name': str(program),
+        'Topic': str(topic),
+        'Conference': str(conference),
+        'Pay': str(pay)
+    })
+    return render_template('Completedform.html')
+    springresearch_survey()
+
+
+
+@app.route('/summerresearch_survey')
+def summerresearchbutton():
+        # cred = credentials.Certificate('firebase-sdk.json')
+        # firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        userid = ''
+        if 'My.Fisk.Edu' in studentsignin.email:
+            for i in studentsignin.email:
+                if i != '@':
+                    userid = userid + i
+                elif i == '@':
+                    break
+        doc_ref = db.collection('student').document(str(userid))
+        docs = doc_ref.collection(str('2022')).get()
+        docs = doc_ref.collection(str('2022')).document('Summer Research Experience Information').get()
+        print(docs.to_dict())
+        info_doc = docs.to_dict()
+
+        if info_doc:
+            classification = info_doc['Classification']
+            year = info_doc['Year']
+            uni_name = info_doc['University Name']
+            program = info_doc['Program Name']
+            topic = info_doc['Topic']
+            conference = info_doc['Conference']
+            pay = info_doc['Pay']
+        else:
+            classification = ""
+            year = ""
+            uni_name = ""
+            program = ""
+            topic = ""
+            conference = ""
+            pay = ""
+
+        # return render_template("Fa.html", grade=grade.title(), year=year, company_name=company_name,
+        #                        pay=pay, position=position.title())
+        return render_template("summerresearchForm.html", topic = topic, uni_name= uni_name, program=program, conference=conference.title(), pay = pay, year=year, classification=classification)
+        summerresearchbutton()
+    # return render_template("FallForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+    # fallbutton()
+
+@app.route('/summerresearchsurvey', methods=['POST','GET'])#name of form
+def summerresearch_survey():
+    # cred = credentials.Certificate('firebase-sdk.json')
+    # firebase_admin.initialize_app(cred)
+    email = studentsignin.email
+    # email = request.form['EMAIL']
+    email = email.lower()
+    email = email.title()
+    id = ''
+    if 'My.Fisk.Edu' in email:
+        for i in email:
+            if i != '@':
+                id = id + i
+            elif i == '@':
+                break
+
+    db = firestore.client()
+    doc_ref = db.collection('student').document(str(id))
+    research_info = doc_ref.collection('2022').document('Summer Research Experience Information')
+
+    classification = request.form['CLASSIFICATION']
+    uni_name = request.form['UNINAME']
+    year = request.form['YEAR']
+    conference = request.form['CONFERENCE']
+    program = request.form['PROGRAM']
+    pay = request.form['PAY']
+    topic = request.form['TOPIC']
+
+    research_info.set({
+        'Fisk Email': str(email),
+        'Year': str(year),
+        'Classification': str(classification),
+        'University Name': str(uni_name),
+        'Program Name': str(program),
+        'Topic': str(topic),
+        'Conference': str(conference),
+        'Pay': str(pay)
+    })
+    return render_template('Completedform.html')
+    summerresearch_survey()
+
+
+@app.route('/winterresearch_survey')
+def winterresearchbutton():
+        # cred = credentials.Certificate('firebase-sdk.json')
+        # firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        userid = ''
+        if 'My.Fisk.Edu' in studentsignin.email:
+            for i in studentsignin.email:
+                if i != '@':
+                    userid = userid + i
+                elif i == '@':
+                    break
+        doc_ref = db.collection('student').document(str(userid))
+        docs = doc_ref.collection(str('2022')).get()
+        docs = doc_ref.collection(str('2022')).document('Winter Research Experience Information').get()
+        print(docs.to_dict())
+        info_doc = docs.to_dict()
+
+        if info_doc:
+            classification = info_doc['Classification']
+            year = info_doc['Year']
+            uni_name = info_doc['University Name']
+            program = info_doc['Program Name']
+            topic = info_doc['Topic']
+            conference = info_doc['Conference']
+            pay = info_doc['Pay']
+        else:
+            classification = ""
+            year = ""
+            uni_name = ""
+            program = ""
+            topic = ""
+            conference = ""
+            pay = ""
+
+        # return render_template("Fa.html", grade=grade.title(), year=year, company_name=company_name,
+        #                        pay=pay, position=position.title())
+        return render_template("winterresearchForm.html", topic = topic, uni_name= uni_name, program=program, conference=conference.title(), pay = pay, year=year, classification=classification)
+        winterresearchbutton()
+    # return render_template("FallForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+    # fallbutton()
+
+@app.route('/winterresearchsurvey', methods=['POST','GET'])#name of form
+def winterresearch_survey():
+    # cred = credentials.Certificate('firebase-sdk.json')
+    # firebase_admin.initialize_app(cred)
+    email = studentsignin.email
+    # email = request.form['EMAIL']
+    email = email.lower()
+    email = email.title()
+    id = ''
+    if 'My.Fisk.Edu' in email:
+        for i in email:
+            if i != '@':
+                id = id + i
+            elif i == '@':
+                break
+
+    db = firestore.client()
+    doc_ref = db.collection('student').document(str(id))
+    research_info = doc_ref.collection('2022').document('Winter Research Experience Information')
+
+    classification = request.form['CLASSIFICATION']
+    uni_name = request.form['UNINAME']
+    year = request.form['YEAR']
+    conference = request.form['CONFERENCE']
+    program = request.form['PROGRAM']
+    pay = request.form['PAY']
+    topic = request.form['TOPIC']
+
+    research_info.set({
+        'Fisk Email': str(email),
+        'Classification': str(classification),
+        'Year': str(year),
+        'University Name': str(uni_name),
+        'Program Name': str(program),
+        'Topic': str(topic),
+        'Conference': str(conference),
+        'Pay': str(pay)
+    })
+    return render_template('Completedform.html')
+    winterresearch_survey()
+
+
+# #Post grad stuff!!!!!
 @app.route('/postgrad_page')
 def postgradbutton():
     fname = studentsignin.first_name
@@ -676,7 +1411,35 @@ def fulltime_survey():
 #parttime
 @app.route('/parttime_survey')
 def parttimebutton():
-    return render_template("parttimeForm.html")
+    userid = ''
+    db = firestore.client()
+    if 'My.Fisk.Edu' in studentsignin.email:
+        for i in studentsignin.email:
+            if i != '@':
+                userid = userid + i
+            elif i == '@':
+                break
+
+    doc_ref = db.collection('student').document(str(userid))
+    docs = doc_ref.collection(str('2022')).get()
+    docs = doc_ref.collection(str('2022')).document('Part-Time Information').get()
+
+    info_doc = docs.to_dict()
+    if info_doc:
+        personal_email = info_doc['Personal Email']
+        year = info_doc['Year']
+        company_name = info_doc['Company Name']
+        position = info_doc['Position']
+        pay = info_doc['Hourly Pay']
+
+    else:
+        personal_email = ""
+        year = ""
+        company_name = ""
+        pay = ""
+        position = ""
+    return render_template("parttimeForm.html", personal_email=personal_email.capitalize() , year = year, company_name = company_name, pay = pay, position = position.title())
+    parttimebutton()
 
 @app.route('/')
 def parttime_form():
@@ -732,7 +1495,7 @@ def gradschoolbutton():
 
     doc_ref = db.collection('student').document(str(userid))
     docs = doc_ref.collection(str('2022')).get()
-    docs = doc_ref.collection(str('2022')).document('Full-Time Information').get()
+    docs = doc_ref.collection(str('2022')).document('Graduate School Information').get()
 
     info_doc = docs.to_dict()
     if info_doc:
@@ -778,9 +1541,9 @@ def gradschool_survey():
 
     db = firestore.client()
     doc_ref = db.collection('student').document(str(id))
-    parttime_info = doc_ref.collection(str(year)).document('Graduate School Information')
+    grad_info = doc_ref.collection(str(year)).document('Graduate School Information')
 
-    parttime_info.set({
+    grad_info.set({
         'Personal Email': str(personal_email),
         'Year': str(year),
         'Graduate School': str(uni_name),
@@ -793,7 +1556,35 @@ def gradschool_survey():
 #military school
 @app.route('/military_survey')
 def militarybutton():
-    return render_template("militaryForm.html")
+    userid = ''
+    db = firestore.client()
+    if 'My.Fisk.Edu' in studentsignin.email:
+        for i in studentsignin.email:
+            if i != '@':
+                userid = userid + i
+            elif i == '@':
+                break
+
+    doc_ref = db.collection('student').document(str(userid))
+    docs = doc_ref.collection(str('2022')).get()
+    docs = doc_ref.collection(str('2022')).document('Military Service Information').get()
+
+    info_doc = docs.to_dict()
+    if info_doc:
+        personal_email = info_doc['Personal Email']
+        year = info_doc['Year']
+        branch = info_doc['Branch']
+        position= info_doc['Position']
+        pay = info_doc['Pay']
+
+    else:
+        personal_email = ""
+        year = ""
+        branch = ""
+        position  = ""
+        pay = ""
+    return render_template("militaryForm.html", personal_email=personal_email,year=year, branch=branch, position=position, pay=pay)
+    militarybutton()
 
 @app.route('/')
 def military_form():
@@ -845,6 +1636,155 @@ def b2studentpage():
     return render_template("studentpage2.html", firstname=fname, lastname=lname, fiskmajor=major, fiskemail = email, studentNumber=student_id )
     # return render_template('studentpage.html')
     b2studentpage()
+
+@app.route('/faculty-b2facultypage')
+def b2facultypage():
+    fname = facultysignin.first_name
+    lname = facultysignin.last_name
+    email = facultysignin.email
+    return render_template("facultypage2.html", firstname=fname, lastname=lname,fiskemail = email)
+    # return render_template('studentpage.html')
+    b2studentpage()
+
+#
+#faculty input
+@app.route('/facultyinputpt1')
+def facutyinputbutton():
+    return render_template("facultyinputpt1.html")
+    facutyinputbutton()
+
+@app.route('/facultyfallsurvey')
+def facutyfallinputbutton():
+    return render_template("facultyfallsurvey.html")
+    facutyfallinputbutton()
+@app.route('/')
+def facultyfall_form():
+    return render_template('facultyfallsurvey.html')
+
+
+@app.route('/facultyfallsurvey', methods=['POST','GET'])#name of form
+def facultyfall_survey():
+    email = facultysignin.email
+    email = email.lower()
+    email = email.title()
+
+
+    db = firestore.client()
+    userid = ''
+    if 'Fisk.Edu' in email:
+        for i in email:
+            if i != '@':
+                userid = userid + i
+            elif i == '@':
+                break
+
+    result = db.collection('FacultyandStaff').document(str(userid)).get()
+    result = result.to_dict()
+    first_name = result.get('First Name')
+    first_name = first_name.lower()
+    first_name = first_name.title()
+    last_name = result.get('Last Name')
+    last_name = last_name.lower()
+    last_name = last_name.title()
+    facultyfullname = str(first_name) + " " + last_name
+
+    # studentinfo
+    email2 = request.form['EMAIL']
+    email2 = email2.lower()
+    email2 = email2.title()
+    id = ''
+    if 'My.Fisk.Edu' in email2:
+        for i in email2:
+            if i != '@':
+                id = id + i
+            elif i == '@':
+                break
+
+    db = firestore.client()
+    userid2 = ''
+    if 'My.Fisk.Edu' in  email2:
+        for i in  email2:
+            if i != '@':
+                userid2 = userid2 + i
+            elif i == '@':
+                break
+    # doc_ref = db.collection('student').document(str(userid))
+    # year = request.form['YEAR']
+    # docs = doc_ref.collection(str(year)).get()
+    # docs = doc_ref.collection(str(year)).document('Fall Internship Information').get()
+
+    # info_doc = docs.to_dict()
+    # if info_doc:
+    #     student = "Student has filled out the form"
+    # else:
+    student = ""
+    db = firestore.client()
+    classification = request.form['CLASSIFICATION']
+    year = request.form['YEAR']
+    company_name = request.form['COMPANYNAME']
+    position = request.form['POSITION']
+    pay = request.form['PAY']
+    doc_ref = db.collection('student').document(str(id))
+    fall_info = doc_ref.collection(str(year)).document('Fall Internship Information-Faculty Input')
+    fall_info.set({
+        'Note': "FACULTY INPUTTED DATA",
+        'Faculty Name': str(facultyfullname),
+        'Classification': str(classification),
+        'Internship Year': str(year),
+        'Company Name': str(company_name),
+        'Position': str(position),
+        'Hourly Pay': str(pay)
+
+    })
+    return render_template('facultyCompletedForm.html', student=student)
+
+    facultyfall_survey()
+
+# @app.route('/')
+# def fall_form2():
+#     return render_template('facultyinput.html')
+#
+#
+# @app.route('/inputsurvey', methods=['POST','GET'])#name of form
+# def fall_survey2():
+#     # cred = credentials.Certificate('firebase-sdk.json')
+#     # firebase_admin.initialize_app(cred)
+#
+#     email = studentsignin.email
+#     # email = request.form['EMAIL']
+#     email = email.lower()
+#     email = email.title()
+#     id = ''
+#     if 'Fisk.Edu' in email:
+#         for i in email:
+#             if i != '@':
+#                 id = id + i
+#             elif i == '@':
+#                 break
+#
+#     classification = request.form['CLASSIFICATION']
+#     year = request.form['YEAR']
+#     company_name = request.form['COMPANYNAME']
+#     position = request.form['POSITION']
+#     pay = request.form['PAY']
+#
+#     db = firestore.client()
+#     doc_ref = db.collection('student').document(str(id))
+#     fall_info = doc_ref.collection(str(year)).document('Fall Internship Information')
+#
+#     fall_info.set({
+#         'Classification': str(classification),
+#         'Internship Year': str(year),
+#         'Company Name': str(company_name),
+#         'Position': str(position),
+#         'Hourly Pay': str(pay)
+#     })
+
+    #retrieving data
+
+    # return render_template('CompletedForm.html')
+    # fall_survey2()
+
 
 if __name__ == "__main__":
     app.run(debug=True)
