@@ -78,6 +78,10 @@ a {
   font-size:12px;
 }
 
+      {% if company_name != "" %}
+  <label for="companyname1"><b>Company Name</b></label>
+    <input type="text" placeholder="Enter the company's name" name="COMPANYNAME" value={{company_name}} id="companyname1" required>
+      {%endif%}
 
       {% if company_name != "" %}
   <label for="companyname1"><b>Company Name</b></label>
