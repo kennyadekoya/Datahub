@@ -79,10 +79,6 @@ a {
 }
 
 
-      {% if company_name != "" %}
-  <label for="companyname1"><b>Company Name</b></label>
-    <input type="text" placeholder="Enter the company's name" name="COMPANYNAME" value={{company_name}} id="companyname1" required>
-      {%endif%}
 
 .fisklogo{
     margin-right:-90px;
@@ -145,70 +141,90 @@ form{
              <a href="https://www.fisk.edu/about/administration/division-of-student-affairs/career-planning-and-development/uncf-career-pathways-initiative/training-and-development/" href="#" id="fisklogo"><img src="https://imagizer.imageshack.com/img922/9246/ILfQWc.png" height="82px" width="108px"></a>
          </div>
 <!--             <p>{{email}}</p>-->
-         <p1>Post Grad</p1>
+         <p1>Summer</p1>
      </nav>
     </div>
 </div>
 <div>
- <form action='parttimesurvey' id="signup-form" method = "POST">
+ <form action='summerresearchsurvey' id="signup-form" method = "POST">
   <div class="container">
-    <h1>Part Time Information </h1>
+    <h1>Research Experience</h1>
     <hr>
 
 <!--       <label for="email"><b>Fisk Email</b></label>-->
 <!--    <input name = "EMAIL" type="text" placeholder="Enter your Fisk Email" id="email" required>-->
-
-     {% if personal_email != "" %}
-    <label for="personal_email1"><b>Personal Email</b></label>
-    <input name = "PERSONAL_EMAIL" type="text" placeholder="Enter your Personal Email" value={{personal_email}} id="personal_email1" required>
+   {% if classification != "" %}
+       <label for="Classification1"><b>Classification</b></label>
+    <input name = "CLASSIFICATION" type="text" placeholder="Enter your classification" value={{classification}} id="Classification1" required>
         {%endif%}
-
-      {% if personal_email == "" %}
-       <label for="personal_email2"><b>Personal Email</b></label>
-     <input name = "PERSONAL_EMAIL" type="text" placeholder="Enter your Personal Email" id="personal_email2" required>
+      {% if classification == "" %}
+       <label for="Classification2"><b>Classification</b></label>
+    <input name = "CLASSIFICATION" type="text" placeholder="Enter your classification"  id="Classification2" required>
         {%endif%}
 
       {% if year != "" %}
       <label for="Year1"><b>Year</b></label>
-    <input name = "YEAR" type="text" placeholder="Enter the year of your internship" value={{year}} id="Year1" required>
+    <input name = "YEAR" type="text" placeholder="Enter the year of your Research Experience Program" value={{year}} id="Year1" required>
     {%endif%}
       {% if year == "" %}
       <label for="Year2"><b>Year</b></label>
-    <input name = "YEAR" type="text" placeholder="Enter the year of your internship" id="Year2" required>
+    <input name = "YEAR" type="text" placeholder="Enter the year of your Research Experience Program"  id="Year2" required>
     {%endif%}
 
-      {% if company_name != "" %}
-  <label for="companyname1"><b>Company Name</b></label>
-    <input type="text" placeholder="Enter the company's name" name="COMPANYNAME" value={{company_name}} id="companyname1" required>
-      {%endif%}
+   {% if uni_name != "" %}
+  <label for="uniname1"><b>University Name</b></label>
+    <input type="text" placeholder="Enter the university's name" value= {{uni_name}} name = "UNINAME" id="uniname1" required>
+    {%endif%}
 
-        {% if company_name == "" %}
-  <label for="companyname2"><b>Company Name</b></label>
-    <input type="text" placeholder="Enter the company's name" name="COMPANYNAME"  id="companyname2" required>
-      {%endif%}
+  {% if uni_name == "" %}
+  <label for="uniname2"><b>University Name</b></label>
+    <input type="text" placeholder="Enter the university's name"  name = "UNINAME" id="uniname2" required>
+    {%endif%}
 
-   {% if position != "" %}
-  <label for="position1"><b>Position</b></label>
-    <input type="text" placeholder="Enter the name of your position" name="POSITION" value={{position}} id="position1" required>
-  {%endif%}
 
-  {% if position == "" %}
-  <label for="position2"><b>Position</b></label>
-    <input type="text" placeholder="Enter the name of your position" name="POSITION"  id="position2" required>
-  {%endif%}
+  {% if program != "" %}
+  <label for="program1"><b>Program Name</b></label>
+    <input type="text" placeholder="Enter the name of the research program" name="PROGRAM" value={{program}} id="program1" required>
+    {%endif%}
+
+   {% if program == "" %}
+  <label for="program2"><b>Program Name</b></label>
+    <input type="text" placeholder="Enter the name of the research program" name="PROGRAM" id="program2" required>
+    {%endif%}
+
+  {% if topic != "" %}
+  <label for="Topic1"><b>Research Topic</b></label>
+    <input type="text" placeholder="Enter the your research topic" name="TOPIC"  value={{topic}} id="Topic1" required>
+{%endif%}
+
+    {% if topic == "" %}
+  <label for="Topic2"><b>Research Topic</b></label>
+    <input type="text" placeholder="Enter the your research topic" name="TOPIC"  id="Topic2" required>
+{%endif%}
+
 
   {% if pay != "" %}
-  <label for="pay1"><b>Hourly Pay</b></label>
-    <input type="text" placeholder="Enter your Hourly Pay" name="PAY" value={{pay}} id="pay1" required>
+  <label for="pay1"><b>Stipend</b></label>
+    <input type="text" placeholder="Enter the research stipend amount" name="PAY" value={{pay}} id="pay1" required>
   {%endif%}
 
   {% if pay == "" %}
-  <label for="pay2"><b>Hourly Pay</b></label>
-    <input type="text" placeholder="Enter your Hourly Pay" name="PAY" id="pay2" required>
+  <label for="pay2"><b>Stipend</b></label>
+    <input type="text" placeholder="Enter the research stipend amount" name="PAY" id="pay2" required>
   {%endif%}
 
-    <button class="registerbtn">Submit Form</button>
 
+      {% if conference != "" %}
+  <label for="Conference1"><b>Conference Information</b></label>
+    <input type="text" placeholder="Did you or will you present at a research conference/symposium" name="CONFERENCE"  value={{conference}} id="Conference1" required>
+{%endif%}
+
+  {% if conference == "" %}
+  <label for="Conference1"><b>Conference Information</b></label>
+    <input type="text" placeholder="Did you or will you present at a research conference/symposium" name="CONFERENCE"   id="Conference2" required>
+{%endif%}
+
+        <button class="registerbtn">Submit Form</button>
   </div>
 </form>
 </div>

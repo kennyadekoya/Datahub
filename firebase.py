@@ -36,8 +36,8 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-email = 'kAADEKOYA10'
-email=email.title()
+# email = 'kAADEKOYA10'
+# email=email.title()
 
 # result = db.collection('student').document(str(email)).get()
 # if result.exists:
@@ -47,22 +47,45 @@ email=email.title()
 # for doc in docs:
 #     print(doc.to_dict())
 
+#
+# q1 = input("Whats teh first student's name?")
+# q2 = input("Whats teh last student's name?")
+email = input("Whats the students fisk email?")
+email=email.title()
+userid= ""
+if 'My.Fisk.Edu' in email:
+    for i in email:
+        if i != '@':
+            userid = userid + i
+        elif i == '@':
+            break
+print(userid)
+#
+# print(id)
+q4 = input("semster?")
+year = int(input("year"))
 
-id = email
-doc_ref = db.collection('student').document(str(id))
-docs = doc_ref.collection(str('2002')).get()
-docs = doc_ref.collection(str('2002')).document('Full-Time Information').get()
+#if student has filled info
+#student has filled out the information
+#
+# id = email
+# print(id)
+doc_ref = db.collection('student').document(str(userid))
+docs = doc_ref.collection(str(year)).get()
+docs = doc_ref.collection(str(year)).document('Fall Internship Information').get()
 print(docs.to_dict())
+
 info_doc = docs.to_dict()
 # year = info_doc['Internship Year']
 # company_name = info_doc['Company Name']
 # pay = info_doc['Hourly Pay']
 # position = info_doc['Position']
-print(info_doc)
+# print(info_doc)
 if info_doc:
     print("Dictionary is not empty!")
 else:
     print("Dictionary is empty!")
+
 # if len(info_doc) ==0 :
 #     print("Dictionary is not empty!")
 # else:
