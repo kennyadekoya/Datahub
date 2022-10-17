@@ -136,6 +136,13 @@ h2{
 form{
     margin-bottom: 10px;
 }
+
+.danger {
+  background-color: #ffdddd;
+  border-left: 6px solid #f44336;
+}
+
+
 </style>
 </head>
 <body>
@@ -149,55 +156,45 @@ form{
          </div>
 <!--             <p>{{email}}</p>-->
 <!--         <p1>{{apple}}</p1>-->
-         <p1>Fall</p1>
+         <p1>Spring</p1>
 
      </nav>
     </div>
 
 </div>
 <div>
- <form action='inputsurvey' id="signup-form" method = "POST">
+ <form action='facultyspringsurvey' id="signup-form" method = "POST">
   <div class="container">
     <h1>Internship Information </h1>
     <hr>
 
+       <label for="name"><b>Full Name</b></label>
+    <input name = "NAME" type="text" placeholder="Enter the student's full name"  id="name" required>
 
-       <label for="email2"><b>Classification</b></label>
-    <input name = "EMAIL" type="text" placeholder="Enter the student's email" id="email2" required>
+  <label for="email"><b>Student's Fisk Email</b></label>
+    <input name = "EMAIL" type="text" placeholder="Enter the student's Fisk Email"  id="email" required>
 
-<!--    <label for="Classification"><b>Classification</b></label>-->
+      <label for="Year"><b>Year</b></label>
+    <input name = "YEAR" type="text" placeholder="Enter the year of your internship" id="Year" required>
 
-       <label for="Classification2"><b>Classification</b></label>
-    <input name = "CLASSIFICATION" type="text" placeholder="Enter the student's classification"  id="Classification2" required>
-
-
-
-
-      <label for="Year2"><b>Year</b></label>
-    <input name = "YEAR" type="text" placeholder="Enter the year of your internship" id="Year2" required>
-
+       <label for="classification"><b>Classification</b></label>
+    <input name = "CLASSIFICATION" type="text" placeholder="Enter the student's classification"  id="classification" >
 
 
   <label for="companyname2"><b>Company Name</b></label>
     <input type="text" placeholder="Enter the company's name" name="COMPANYNAME"  id="companyname2" required>
 
 
-  <label for="position1"><b>Position</b></label>
-    <input type="text" placeholder="Enter the name of your position" name="POSITION" id="position1" required>
-
-
-  <label for="pay1"><b>Hourly Pay</b></label>
-    <input type="text" placeholder="Enter your hourly pay" name="PAY"  id="pay1" required>
+  <label for="position2"><b>Position</b></label>
+    <input type="text" placeholder="Enter the name of your position" name="POSITION"  id="position2">
 
 
 
-<!--  <label for="research"><b>Is this a research opportunity?</b></label>-->
-<!--    <input name = "RESEARCH" type="text" placeholder="Enter Yes or No" id="research" required>-->
+  <label for="pay2"><b>Hourly Pay</b></label>
+    <input type="text" placeholder="Enter your hourly pay" name="PAY" id="pay2">
 
-    <button class="registerbtn">Submit Form</button>
+    <button class="registerbtn">Submit Form</button></div>
 
-  </div>
-</form>
 </div>
 
 <div class="footer">
