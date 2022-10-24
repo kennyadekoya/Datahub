@@ -122,7 +122,7 @@ option{
 
 p1 {
    text-align: left;
-   margin-right: 19px
+   margin-right: 22px
  }
 
 
@@ -200,7 +200,7 @@ li {
     text-align: center;
     font-family: Helvetica, sans-serif;
     font-size: 15px;
-    margin-top: 100px;
+    margin-top: 50px;
     color: #142F69
 }
 
@@ -225,9 +225,9 @@ li {
 
 .button--fall {
   margin-left: calc( 50vw - 175px );
-  margin-top: calc( 3vh - 30px );
+  margin-top: calc( 3vh - 30px )
   width: 350px;
-  height: 60px;
+  height: 100px;
   border: none;
   border-radius: 5px;
   background: #fff;
@@ -247,9 +247,9 @@ li {
 
 button {
   margin-left: calc( 50vw - 175px );
-  margin-top: calc( 10vh - 43px);
+  margin-top: calc(15vh - 49px);
   width: 350px;
-  height: 60px;
+  height: 100px;
   border: none;
   border-radius: 5px;
   background: #fff;
@@ -279,14 +279,13 @@ button:active {
   font-size:12px;
 }
 
-.fall, .spring, .winter, .summer,.postgrad{
+.input_data, .retrieve_data{
     color: #142F69;
 }
-
 </style>
 <head>
     <meta charset="UTF-8">
-    <title>StudentPage</title>
+    <title>FacultyPage</title>
 </head>
 <body>
 
@@ -298,34 +297,50 @@ button:active {
          </div>
 <!--             <p>{{email}}</p>-->
          <p1>{{firstname}} {{lastname}} </p1>
+          <p1>Fall</p1>
+<!--          <p1>Faculty</p1>-->
+
      </nav>
     </div>
 </div>
 
+
+<!--<div class="card">-->
+<!--  <div class="container">-->
+<!--      <p>{{fiskemail}}</p>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--<div class="card2">-->
+<!--  <div class="container2">-->
+<!--    <p>Email:</p>-->
+<!--    <p>Student Number: </p>-->
+<!--    <p>Major:</p>-->
+<!--&lt;!&ndash;    <p>Classification:</p>&ndash;&gt;-->
+<!--  </div>-->
+<!--</div>-->
+
+
 <div class="title">
-    <h1>Semester<h1>
+    <h1>Select An Opportunity<h1>
 </div>
 
-<button class="button--fall">
-    <a class="fall" href="facultyfallsurvey" href="#">Fall</a>
+
+
+<!--<button class="button&#45;&#45;fall" href="fall" href="#"  onclick="window.location.href = 'https://stackhowto.com';">-->
+<button class="button--internship">
+    <a class="internshipinfo" href="facultyfall_internship_info" href="#">Fall Internship Information</a>
 <!--  Fall-->
 </button>
 
-<button class="button--spring">
-<a class="spring" href="facultyspringsurvey" href="#">Spring</a>
+
+<button class="button--retrieve">
+    <a class="researchinfo" href="facultyfallresearch_survey" href="#">Research Experience</a>
+
+<!--  Fall-->
 </button>
 
-<button class="button--summer">
-  <a class="summer" href="facultysummersurvey" href="#">Summer</a>
-</button>
-
-<button class="button--winter">
-<a class="winter" href="facultywintersurvey" href="#">Winter</a>
-</button>
-
-<button class="button--postgrad">
-<a class="postgrad" href="facultypostgrad_page" href="#">Post Grad</a>
-</button>
 
 <div class="footer">
     <p>
@@ -335,7 +350,3 @@ button:active {
      Office Number: <a href="tel:615-329-8718" style='color: white;'> 615-329-8718 </a> | Email: <a href="mailto:careerplanning@fisk.edu" style='color: white;'> Careerplanning@fisk.edu
  </p>
 </div>
-
-</body>
-
-</html>

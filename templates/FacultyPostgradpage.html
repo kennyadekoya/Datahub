@@ -200,7 +200,8 @@ li {
     text-align: center;
     font-family: Helvetica, sans-serif;
     font-size: 15px;
-    margin-top: 100px;
+    margin-top: 80px;
+    margin-bottom: -40px;
     color: #142F69
 }
 
@@ -247,7 +248,7 @@ li {
 
 button {
   margin-left: calc( 50vw - 175px );
-  margin-top: calc( 10vh - 43px);
+  margin-top: calc( 10vh - 30px);
   width: 350px;
   height: 60px;
   border: none;
@@ -279,14 +280,14 @@ button:active {
   font-size:12px;
 }
 
-.fall, .spring, .winter, .summer,.postgrad{
+.fulltime, .parttime, .gradschool, .military{
     color: #142F69;
 }
 
 </style>
 <head>
     <meta charset="UTF-8">
-    <title>StudentPage</title>
+    <title>Faculty-PostGradPage</title>
 </head>
 <body>
 
@@ -302,30 +303,33 @@ button:active {
     </div>
 </div>
 
+
 <div class="title">
-    <h1>Semester<h1>
+    <h1>Post Grad Opportunities<h1>
 </div>
 
-<button class="button--fall">
-    <a class="fall" href="facultyfallsurvey" href="#">Fall</a>
+<!--<button class="button&#45;&#45;fall" href="fall" href="#"  onclick="window.location.href = 'https://stackhowto.com';">-->
+<button class="button--fulltime">
+    <a class="fulltime" href="facultyfulltime_survey" href="#">Full Time</a>
 <!--  Fall-->
 </button>
 
-<button class="button--spring">
-<a class="spring" href="facultyspringsurvey" href="#">Spring</a>
+<button class="button--parttime">
+<a class="parttime" href="facultyparttime_survey" href="#">Part Time</a>
 </button>
 
-<button class="button--summer">
-  <a class="summer" href="facultysummersurvey" href="#">Summer</a>
+<button class="button--gradschool">
+  <a class="gradschool" href="facultygradschool_survey" href="#">Graduate School</a>
 </button>
 
-<button class="button--winter">
-<a class="winter" href="facultywintersurvey" href="#">Winter</a>
+<button class="button--military">
+  <a class="military" href="facultymilitary_survey" href="#">Military Service</a>
 </button>
 
-<button class="button--postgrad">
-<a class="postgrad" href="facultypostgrad_page" href="#">Post Grad</a>
-</button>
+<!--<button class="button&#45;&#45;timeoff">-->
+<!--  <a class="timeoff" href="timeoff_survey" href="#">Graduate School</a>-->
+<!--</button>-->
+
 
 <div class="footer">
     <p>

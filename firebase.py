@@ -50,10 +50,10 @@ db = firestore.client()
 #
 # q1 = input("Whats teh first student's name?")
 # q2 = input("Whats teh last student's name?")
-email = input("Whats the students fisk email?")
+email = input("Whats your fisk email?")
 email=email.title()
 userid= ""
-if 'My.Fisk.Edu' in email:
+if 'Fisk.Edu' in email:
     for i in email:
         if i != '@':
             userid = userid + i
@@ -65,26 +65,20 @@ print(userid)
 q4 = input("semster?")
 year = int(input("year"))
 
-#if student has filled info
-#student has filled out the information
-#
-# id = email
-# print(id)
-doc_ref = db.collection('student').document(str(userid))
-docs = doc_ref.collection(str(year)).get()
-docs = doc_ref.collection(str(year)).document('Fall Internship Information').get()
-print(docs.to_dict())
+facultydoc_ref = db.collection('FacultyandStaff').document(str(userid))
+facultyfallresearch_info = facultydoc_ref.collection(str(year)).document('Faculty Inputted Fall Research Experience Information')
+facultyfallresearch_info = facultyfallresearch_info.document(str(id))
 
-info_doc = docs.to_dict()
-# year = info_doc['Internship Year']
-# company_name = info_doc['Company Name']
-# pay = info_doc['Hourly Pay']
-# position = info_doc['Position']
-# print(info_doc)
-if info_doc:
-    print("Dictionary is not empty!")
-else:
-    print("Dictionary is empty!")
+# info_doc = docs.to_dict()
+# # year = info_doc['Internship Year']
+# # company_name = info_doc['Company Name']
+# # pay = info_doc['Hourly Pay']
+# # position = info_doc['Position']
+# # print(info_doc)
+# if info_doc:
+#     print("Dictionary is not empty!")
+# else:
+#     print("Dictionary is empty!")
 
 # if len(info_doc) ==0 :
 #     print("Dictionary is not empty!")
