@@ -36,6 +36,72 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
+email = "KAAdekoya@fisk.edu"
+email = email.lower()
+email = email.title()
+
+db = firestore.client()
+userid = ''
+if 'Fisk.Edu' in email:
+    for i in email:
+        if i != '@':
+            userid = userid + i
+        elif i == '@':
+            break
+
+result = db.collection('FacultyandStaff').document(str(userid)).get()
+result = result.to_dict()
+first_name = result.get('First Name')
+first_name = first_name.lower()
+first_name = first_name.title()
+last_name = result.get('Last Name')
+last_name = last_name.lower()
+last_name = last_name.title()
+facultyfullname = str(first_name) + " " + last_name
+
+# studentinfo
+email2 = "izzyMckarthy20@my.fisk.edu"
+email2 = email2.lower()
+email2 = email2.title()
+id = ''
+if 'My.Fisk.Edu' in email2:
+    for i in email2:
+        if i != '@':
+            id = id + i
+        elif i == '@':
+            break
+
+student = ""
+db = firestore.client()
+
+studentfullname = "Isabell Mckrathy"
+personal_email = "izzy_Mckarthy20@yahoo.com"
+year = "2022"
+company_name = "EXXON"
+position = "Post Grad Intern"
+pay = "70,000"
+
+
+# facultydoc_ref = db.collection('FacultyandStaff').document(str(userid))
+# facultyfallresearch_info = facultydoc_ref.collection(str(year)).document("Spring").collection("Spring Research Experience Information: Faculty Input").document(str(id))
+# # do teh same thing for winter survey post grad
+
+# facultyfallresearch_info= facultyfallresearch_info..document(str(id)).collection('Faculty Inputted Fall Research Experience Information')
+# facultyfallresearch_info= facultyfallresearch_info.document(str(id))
+facultydoc_ref = db.collection('FacultyandStaff').document(str(userid))
+facultyfulltime_info = facultydoc_ref.collection(str(year)).document("Post Graduate Opportunity").collection("Full Time Opportunity: Faculty Input").document(str(id))
+facultyfulltime_info.set({
+    'Student Name': str(studentfullname),
+    'Student UserName': str(id),
+    'Fisk Email': str(email),
+    'Personal Email': str(personal_email),
+    'Year': str(year),
+    'Company Name': str(company_name),
+    'Position': str(position),
+    'Salary': str(pay)
+})
+
+
 # email = 'kAADEKOYA10'
 # email=email.title()
 
@@ -50,24 +116,24 @@ db = firestore.client()
 #
 # q1 = input("Whats teh first student's name?")
 # q2 = input("Whats teh last student's name?")
-email = input("Whats your fisk email?")
-email=email.title()
-userid= ""
-if 'Fisk.Edu' in email:
-    for i in email:
-        if i != '@':
-            userid = userid + i
-        elif i == '@':
-            break
-print(userid)
+# email = input("Whats your fisk email?")
+# email=email.title()
+# userid= ""
+# if 'Fisk.Edu' in email:
+#     for i in email:
+#         if i != '@':
+#             userid = userid + i
+#         elif i == '@':
+#             break
+# print(userid)
+# #
+# # print(id)
+# q4 = input("semster?")
+# year = int(input("year"))
 #
-# print(id)
-q4 = input("semster?")
-year = int(input("year"))
-
-facultydoc_ref = db.collection('FacultyandStaff').document(str(userid))
-facultyfallresearch_info = facultydoc_ref.collection(str(year)).document('Faculty Inputted Fall Research Experience Information')
-facultyfallresearch_info = facultyfallresearch_info.document(str(id))
+# facultydoc_ref = db.collection('FacultyandStaff').document(str(userid))
+# facultyfallresearch_info = facultydoc_ref.collection(str(year)).document('Faculty Inputted Fall Research Experience Information')
+# facultyfallresearch_info = facultyfallresearch_info.document(str(id))
 
 # info_doc = docs.to_dict()
 # # year = info_doc['Internship Year']
