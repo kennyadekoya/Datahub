@@ -43,7 +43,7 @@ firebase_admin.initialize_app(cred)
 #creating a homepage for the dashboard
 @app.route('/')
 def homepage():
-    return render_template("website.html")#returns/runs the code from the html file
+    return render_template("individualdataform.html")#returns/runs the code from the html file
 
 # student info
 
@@ -2968,8 +2968,69 @@ def facultygradschool_survey():
     })
 
     return render_template('facultyCompletedForm.html', student=student)
+#individual data
+@app.route('/retrievedata')
+def retrievedata():
+    fname = facultysignin.first_name
+    lname = facultysignin.last_name
+    return render_template("retrievedata.html",firstname=fname, lastname=lname)
+    retrievedata()
 
+
+#individual data
+@app.route('/individualdata')
+def individualdata():
+    fname = facultysignin.first_name
+    lname = facultysignin.last_name
+    return render_template("individualdataform.html",firstname=fname, lastname=lname)
+    individualdata()
+
+
+
+# def individualdata():
+#     # cred = credentials.Certificate('firebase-sdk.json')
+#     # firebase_admin.initialize_app(cred)
+#     db = firestore.client()
+#     userid = ''
+#     if 'My.Fisk.Edu' in studentsignin.email:
+#         for i in studentsignin.email:
+#             if i != '@':
+#                 userid = userid + i
+#             elif i == '@':
+#                 break
+#     doc_ref = db.collection('student').document(str(userid))
+#     docs = doc_ref.collection(str('2022')).get()
+#     docs = doc_ref.collection(str('2022')).document('Fall Internship Information').get()
+#     print(docs.to_dict())
+#     info_doc = docs.to_dict()
+#     if info_doc:
+#         grade = info_doc['Classification']
+#         year = info_doc['Internship Year']
+#         company_name = info_doc['Company Name']
+#         pay = info_doc['Hourly Pay']
+#         position = info_doc['Position']
+#     else:
+#         grade = ""
+#         year = ""
+#         company_name = ""
+#         pay = ""
+#         position = ""
+#
+#     return render_template("fallinternshipfollowup.html", grade=grade.title(), year=year, company_name=company_name, pay=pay,position=position.title())
+#     fallbutton()
+#
+#         return render_template("FallForm.html", grade=grade.title(), year = year, company_name = company_name, pay = pay, position = position.title())
+#         fallbuttonpt2()
+#
+# #
+# @app.route('/')
+# def fall_form():
+#     return render_template('FallForm.html')
+#
+#
+# @app.route('/fallsurvey', methods=['POST','GET'])#name of form
+# def fall_survey():
+#
 
 if __name__ == "__main__":
     app.run(debug=True)
-

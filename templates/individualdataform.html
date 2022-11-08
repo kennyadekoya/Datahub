@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    * {
+    font-family: 'lato', sans-serif;
+    }
+    body{
+    background-color: white;
+    }
+
+    .SignUp-div{
+    margin:100px auto;
+    width:400px;
+    background-color:#ffff;
+    padding:60px;
+    border-color:#142F69;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 5px;
+    }
+
+    .center {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 90%;
+        }
+
+     .title, .sub-title{
+        text-align: center;
+        color: black;
+     }
+
+     .title {
+     font-weight: bolder;
+     font-size: 20px;
+     margin-top: 15px;
+     }
+
+     .form{
+     width:100%
+     margin-top: 30px;
+     }
+
+     .form input{
+     font-size: 18px;
+     padding: 1px 0.4px 1px 1px;
+     border:none;
+     border-width: 10px 20px 10px 5px;
+     outline: none;
+     background: none;
+     }
+    .email, .year, .list, .select{
+    display: block;
+    border-radius: 10px;
+    border: 1px solid rgba(0.9,0,0,0.2);
+    padding: 15px;
+    margin: 5px 0;
+    }
+
+    .form svg {
+    height: 25px;
+    margin-bottom:-5px;
+    margin-left: 10px;
+    margin-right: 5px;
+    }
+
+    .options {
+       display: flex;
+       flex-direction: row;
+       justify-content: space-between;
+       padding: 5px 0px;
+       margin-bottom: 30px;
+    }
+
+    button.signin-btn {
+       width:100%;
+       padding: 12px 10px;
+       border: none;
+       font-size: 18px;
+       border-radius: 30px;
+       background-color: #142F69;
+       color: white;
+       margin-bottom: 5px;
+       text-decoration: none;
+       display: inline-block;
+       cursor: pointer;
+       }
+       .sign-up{
+        text-decoration: none;
+        color: black;
+        text-align: center;
+        }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title> Faculty SIGN IN PAGE</title>
+
+</head>
+<body>
+    <div class="SignUp-div">
+        <img src="https://givingmatters.civicore.com/?downloadFile=1&table=organizations&field=logo&check=3604bbb743eff744ff15fa2dceeda504&key=1288&openGraph=1" alt="" class="center">
+
+        <div class = "title"> Individual Student Request Form</div>
+        <div id="modal-signup" class="form">
+            <form action='individualstudentrequestform' id="signup-form" method = "POST">
+                <div class="email">
+                    <input name = "EMAIL" type="text" id="retrive_email" placeholder="Student's Fisk Email" required>
+                </div>
+                <div class="year">
+                    <input name = "EMAIL" type="text" id="retrive_year" placeholder="Year of Opportunity" required>
+                </div>
+
+<!--                <label>Select Opportunity:</label>-->
+<!--                 <select name ="listofstuff" id="stuff" name="Opportunity">-->
+<!--&lt;!&ndash;                       <div class="year">&ndash;&gt;-->
+                            <label>Male<input type="radio" name="gender" value="male" /></label>
+                           <label>Female<input type="radio" name="gender" value="female" /></label>
+<!--                      <option value="internship">Internship</option>-->
+<!--                      <option value="fulltime">Full-Time Post Graduate Oppurutinity </option>-->
+<!--                      <option value="parttime">Part-Time Post Graduate Oppurutinity</option>-->
+<!--                      <option value="gradschool">Graduate School</option>-->
+<!--                      <option value="military">Military</option>-->
+<!--                       </div>-->
+<!--                    </select>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+
+                <button class="signin-btn">SUBMIT</button>
+                </form>
+            </div>
+        </div>
+
+</body>
+</html>
